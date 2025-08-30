@@ -1,4 +1,4 @@
-import { Outlet, Link, useLocation } from "react-router-dom";
+import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
 import {
   Home,
   Folder,
@@ -12,6 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
+import { useAuthStore } from "@/store/auth-store";
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard", icon: Home },
@@ -22,11 +23,14 @@ const navigation = [
 
 export function DashboardLayout() {
   const location = useLocation();
+  const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const handleLogout = () => {
-    // TODO: Implement logout logic in Phase 2
-    console.log("Logout clicked");
+  const { user, logout } = useAuthStore();
+
+  const handleLogout = async () => {
+    await logout();
+    navigate("/auth/login");
   };
 
   return (
@@ -50,7 +54,7 @@ export function DashboardLayout() {
       >
         <div className="flex flex-col h-full">
           {/* Logo */}
-          <div className="flex items-center justify-between h-[53px] px-6 border-b">
+          <div className="flex items-center justify-between h-12 px-6 border-b">
             <Link to="/dashboard" className="flex items-center space-x-2">
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
                 <span className="font-bold">T</span>
@@ -94,13 +98,21 @@ export function DashboardLayout() {
           <div className="border-t p-4">
             <div className="flex items-center space-x-3 px-3 py-2">
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-200">
-                <User className="h-4 w-4" />
+                {user?.avatar_url ? (
+                  <img
+                    src={user.avatar_url}
+                    alt={user.full_name}
+                    className="h-8 w-8 rounded-full"
+                  />
+                ) : (
+                  <User className="h-4 w-4" />
+                )}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium truncate">John Doe</p>
-                <p className="text-xs text-gray-500 truncate">
-                  john@example.com
+                <p className="text-sm font-medium truncate">
+                  {user?.full_name}
                 </p>
+                <p className="text-xs text-gray-500 truncate">{user?.email}</p>
               </div>
             </div>
             <Button
@@ -119,7 +131,7 @@ export function DashboardLayout() {
       {/* Main content */}
       <div className="lg:ml-64">
         {/* Top bar */}
-        <header className="bg-white border-b px-4 py-4 lg:px-6">
+        <header className="bg-white border-b px-4 py-4  h-12  lg:px-6">
           <div className="flex items-center justify-between">
             <Button
               variant="ghost"
@@ -132,7 +144,7 @@ export function DashboardLayout() {
 
             <div className="flex items-center space-x-4 ml-auto">
               <div className="text-sm text-gray-600">
-                Welcome back, John! 👋
+                Welcome back, {user?.full_name?.split(" ")[0] || "User"}! 👋
               </div>
             </div>
           </div>
