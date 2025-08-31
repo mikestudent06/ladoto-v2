@@ -35,7 +35,7 @@ export const registerSchema = z
     path: ["confirmPassword"],
   });
 
-// Project validation schemas (for future phases)
+// Project validation schemas
 export const projectSchema = z.object({
   name: z
     .string()
@@ -45,10 +45,12 @@ export const projectSchema = z.object({
   description: z
     .string()
     .max(500, "Description must be less than 500 characters")
-    .optional(),
+    .optional()
+    .or(z.literal("")),
+  status: z.enum(["active", "completed", "archived"]).optional(),
 });
 
-// Task validation schemas (for future phases)
+// Task validation schemas
 export const taskSchema = z.object({
   title: z
     .string()
@@ -58,12 +60,32 @@ export const taskSchema = z.object({
   description: z
     .string()
     .max(1000, "Description must be less than 1000 characters")
-    .optional(),
-  status: z.enum(["todo", "in_progress", "done"]),
-  priority: z.enum(["low", "medium", "high"]),
+    .optional()
+    .or(z.literal("")),
+  status: z.enum(["todo", "in_progress", "done"]).default("todo"),
+  priority: z.enum(["low", "medium", "high"]).default("medium"),
   project_id: z.string().min(1, "Project is required"),
+  assignee_id: z.string().optional().or(z.literal("")),
+  due_date: z.string().optional().or(z.literal("")),
+});
+
+// Search and filter schemas
+export const taskFiltersSchema = z.object({
+  status: z.array(z.enum(["todo", "in_progress", "done"])).optional(),
+  priority: z.array(z.enum(["low", "medium", "high"])).optional(),
+  project_id: z.string().optional(),
   assignee_id: z.string().optional(),
-  due_date: z.string().optional(),
+  search: z.string().optional(),
+  date_from: z.string().optional(),
+  date_to: z.string().optional(),
+});
+
+export const projectFiltersSchema = z.object({
+  status: z.array(z.enum(["active", "completed", "archived"])).optional(),
+  search: z.string().optional(),
+  owner_id: z.string().optional(),
+  created_from: z.string().optional(),
+  created_to: z.string().optional(),
 });
 
 // Export types from schemas
@@ -71,6 +93,8 @@ export type LoginFormData = z.infer<typeof loginSchema>;
 export type RegisterFormData = z.infer<typeof registerSchema>;
 export type ProjectFormData = z.infer<typeof projectSchema>;
 export type TaskFormData = z.infer<typeof taskSchema>;
+export type TaskFiltersData = z.infer<typeof taskFiltersSchema>;
+export type ProjectFiltersData = z.infer<typeof projectFiltersSchema>;
 
 // Common validation helpers
 export const emailValidation = z
@@ -85,3 +109,17 @@ export const passwordValidation = z
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
     "Password must contain at least one uppercase letter, one lowercase letter, and one number"
   );
+
+// Date validation helpers
+export const dateValidation = z.string().refine((date) => {
+  if (!date) return true; // Optional dates are allowed
+  return !isNaN(Date.parse(date));
+}, "Invalid date format");
+
+export const futureDateValidation = z.string().refine((date) => {
+  if (!date) return true; // Optional dates are allowed
+  const inputDate = new Date(date);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); // Reset time to start of day
+  return inputDate >= today;
+}, "Date must be today or in the future");
