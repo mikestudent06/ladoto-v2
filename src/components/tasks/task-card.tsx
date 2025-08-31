@@ -10,6 +10,7 @@ interface TaskCardProps {
   onDelete?: (task: Task) => void;
   onStatusChange?: (task: Task, status: Task["status"]) => void;
   showProject?: boolean;
+  onView?: (task: Task) => void;
 }
 
 export function TaskCard({
@@ -18,6 +19,7 @@ export function TaskCard({
   onDelete,
   onStatusChange,
   showProject = false,
+  onView,
 }: TaskCardProps) {
   const getStatusColor = (status: Task["status"]) => {
     switch (status) {
@@ -79,6 +81,14 @@ export function TaskCard({
           )}
         </div>
         <div className="flex items-center space-x-1 ml-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => onView?.(task)}
+            className="h-8 px-2"
+          >
+            View
+          </Button>
           <Button
             variant="ghost"
             size="sm"

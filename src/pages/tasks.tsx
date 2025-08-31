@@ -287,6 +287,7 @@ export function TasksPage() {
                   onDelete={handleDeleteTask}
                   onStatusChange={handleStatusChange}
                   showProject
+                  onView={handleViewTask}
                 />
               ))}
             </div>

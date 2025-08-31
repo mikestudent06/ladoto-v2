@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -5,8 +6,12 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Calendar, Flag, Edit, Folder } from "lucide-react";
 import { TaskForm } from "./task-form";
 import { useCreateTask, useUpdateTask } from "@/hooks/use-tasks";
+import { cn, formatDate } from "@/lib/utils";
 import type { Task, TaskFormData } from "@/types";
 
 interface TaskModalProps {
@@ -14,7 +19,7 @@ interface TaskModalProps {
   onClose: () => void;
   task?: Task;
   projectId?: string;
-  mode: "create" | "edit";
+  mode: "create" | "edit" | "view";
 }
 
 export function TaskModal({
@@ -24,49 +29,217 @@ export function TaskModal({
   projectId,
   mode,
 }: TaskModalProps) {
+  const [editMode, setEditMode] = useState(false);
   const createTask = useCreateTask();
   const updateTask = useUpdateTask();
 
-  const isEditing = mode === "edit" && !!task;
+  const isEditing = mode === "edit" || editMode;
+  const isViewing = mode === "view" && !editMode;
+  const isCreating = mode === "create";
   const isLoading = createTask.isPending || updateTask.isPending;
 
   const handleSubmit = async (data: TaskFormData) => {
     try {
-      if (isEditing) {
+      if (isCreating) {
+        await createTask.mutateAsync(data);
+      } else {
         await updateTask.mutateAsync({
-          id: task.id,
+          id: task!.id,
           data,
         });
-      } else {
-        await createTask.mutateAsync(data);
       }
       onClose();
+      setEditMode(false);
     } catch (error) {
       // Error handling is done in the mutation hooks
     }
   };
 
+  const handleEdit = () => {
+    setEditMode(true);
+  };
+
+  const handleCancel = () => {
+    if (mode === "view") {
+      setEditMode(false);
+    } else {
+      onClose();
+    }
+  };
+
+  const getStatusColor = (status: Task["status"]) => {
+    switch (status) {
+      case "todo":
+        return "secondary";
+      case "in_progress":
+        return "info";
+      case "done":
+        return "success";
+      default:
+        return "default";
+    }
+  };
+
+  const getPriorityColor = (priority: Task["priority"]) => {
+    switch (priority) {
+      case "high":
+        return "destructive";
+      case "medium":
+        return "warning";
+      case "low":
+        return "secondary";
+      default:
+        return "default";
+    }
+  };
+
+  const getStatusText = (status: Task["status"]) => {
+    switch (status) {
+      case "todo":
+        return "To Do";
+      case "in_progress":
+        return "In Progress";
+      case "done":
+        return "Done";
+      default:
+        return status;
+    }
+  };
+
+  const getPriorityText = (priority: Task["priority"]) => {
+    return priority.charAt(0).toUpperCase() + priority.slice(1);
+  };
+
+  const isOverdue =
+    task?.due_date &&
+    task.due_date < new Date().toISOString().split("T")[0] &&
+    task.status !== "done";
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="w-full h-full sm:max-w-[1100px] sm:max-h-[810px] overflow-y-scroll">
+      <DialogContent
+        className={cn(
+          isViewing
+            ? "max-h-full"
+            : "w-full h-full sm:max-w-[1100px] sm:max-h-[810px] overflow-y-scroll"
+        )}
+      >
         <DialogHeader>
           <DialogTitle>
-            {isEditing ? "Edit Task" : "Create New Task"}
+            {isCreating && "Create New Task"}
+            {isEditing && !isViewing && "Edit Task"}
+            {isViewing && !editMode && "Task Details"}
           </DialogTitle>
           <DialogDescription>
-            {isEditing
-              ? "Make changes to your task here."
-              : "Add a new task to your project."}
+            {isCreating && "Add a new task to your project."}
+            {isEditing && !isViewing && "Make changes to your task here."}
+            {isViewing && !editMode && "View task details and information."}
           </DialogDescription>
         </DialogHeader>
 
-        <TaskForm
-          task={task}
-          projectId={projectId}
-          onSubmit={handleSubmit}
-          onCancel={onClose}
-          isLoading={isLoading}
-        />
+        {isViewing && !editMode ? (
+          // View Mode - Read-only task details
+          <div className="space-y-6">
+            <div className="space-y-4">
+              <div>
+                <h3 className="text-lg font-semibold">{task?.title}</h3>
+                <div className="flex items-center space-x-2 mt-2">
+                  <Badge
+                    variant={getStatusColor(task?.status!)}
+                    className="text-xs"
+                  >
+                    {getStatusText(task?.status!)}
+                  </Badge>
+                  <Badge
+                    variant={getPriorityColor(task?.priority!)}
+                    className="text-xs gap-1"
+                  >
+                    <Flag className="h-3 w-3" />
+                    {getPriorityText(task?.priority!)}
+                  </Badge>
+                </div>
+              </div>
+
+              {task?.description && (
+                <div>
+                  <h4 className="text-sm font-medium text-muted-foreground mb-2">
+                    Description
+                  </h4>
+                  <p className="text-sm">{task.description}</p>
+                </div>
+              )}
+
+              <div className="grid grid-cols-2 gap-4">
+                {task?.project && (
+                  <div>
+                    <h4 className="text-sm font-medium text-muted-foreground mb-2">
+                      Project
+                    </h4>
+                    <div className="flex items-center space-x-1">
+                      <Folder className="h-4 w-4" />
+                      <span className="text-sm">{task.project.name}</span>
+                    </div>
+                  </div>
+                )}
+
+                {task?.due_date && (
+                  <div>
+                    <h4 className="text-sm font-medium text-muted-foreground mb-2">
+                      Due Date
+                    </h4>
+                    <div
+                      className={`flex items-center space-x-1 text-sm ${
+                        isOverdue ? "text-red-600" : ""
+                      }`}
+                    >
+                      <Calendar className="h-4 w-4" />
+                      <span>{formatDate(task.due_date)}</span>
+                      {isOverdue && (
+                        <span className="text-xs font-medium">(Overdue)</span>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <div>
+                  <h4 className="text-sm font-medium text-muted-foreground mb-2">
+                    Created
+                  </h4>
+                  <span>{formatDate(task?.created_at!)}</span>
+                </div>
+                {task?.updated_at !== task?.created_at && (
+                  <div>
+                    <h4 className="text-sm font-medium text-muted-foreground mb-2">
+                      Last Updated
+                    </h4>
+                    <span>{formatDate(task?.updated_at!)}</span>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="flex justify-end space-x-2 pt-4 border-t">
+              <Button variant="outline" onClick={onClose}>
+                Close
+              </Button>
+              <Button onClick={handleEdit}>
+                <Edit className="h-4 w-4 mr-2" />
+                Edit Task
+              </Button>
+            </div>
+          </div>
+        ) : (
+          // Create/Edit Mode - Form
+          <TaskForm
+            task={task}
+            projectId={projectId}
+            onSubmit={handleSubmit}
+            onCancel={handleCancel}
+            isLoading={isLoading}
+          />
+        )}
       </DialogContent>
     </Dialog>
   );
