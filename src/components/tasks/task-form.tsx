@@ -114,8 +114,8 @@ function DatePicker({
 
   return (
     <div className="space-y-3">
-      {/* Options de date rapides */}
-      <div className="grid grid-cols-2 gap-2">
+      {/* Options de date rapides - Grid responsive */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
         {quickDateOptions.map((option) => {
           const Icon = option.icon;
           const isSelected =
@@ -138,7 +138,9 @@ function DatePicker({
             >
               <Icon className="h-4 w-4 mr-2 flex-shrink-0" />
               <div className="flex flex-col items-start min-w-0">
-                <span className="font-medium text-sm">{option.label}</span>
+                <span className="font-medium text-sm truncate w-full">
+                  {option.label}
+                </span>
                 <span className="text-xs opacity-70">
                   {format(option.date, "EEE d MMM", { locale: fr })}
                 </span>
@@ -148,13 +150,14 @@ function DatePicker({
         })}
       </div>
 
-      {/* Sélecteur de date personnalisé */}
+      {/* Séparateur */}
       <div className="flex items-center space-x-2">
         <div className="flex-1 h-px bg-border" />
         <span className="text-xs text-muted-foreground px-2">ou</span>
         <div className="flex-1 h-px bg-border" />
       </div>
 
+      {/* Sélecteur de date personnalisé */}
       <Popover>
         <PopoverTrigger asChild>
           <Button
@@ -165,13 +168,20 @@ function DatePicker({
               !selectedDate && "text-muted-foreground"
             )}
           >
-            <CalendarIcon className="mr-2 h-4 w-4" />
-            {selectedDate
-              ? format(selectedDate, "EEEE d MMMM yyyy", { locale: fr })
-              : placeholder}
+            <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0" />
+            <span className="truncate">
+              {selectedDate
+                ? format(selectedDate, "EEEE d MMMM yyyy", { locale: fr })
+                : placeholder}
+            </span>
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-0" align="start">
+        <PopoverContent
+          className="w-auto p-0"
+          align="start"
+          side="bottom"
+          sideOffset={4}
+        >
           <Calendar
             mode="single"
             selected={selectedDate}
@@ -252,28 +262,40 @@ export function TaskForm({
   };
 
   return (
-    <form onSubmit={handleSubmit(handleFormSubmit as any)} className="space-y-6">
+    <form
+      onSubmit={handleSubmit(handleFormSubmit as any)}
+      className="space-y-4 sm:space-y-6"
+    >
+      {/* Titre */}
       <div className="space-y-2">
-        <Label htmlFor="title">Titre de la tâche</Label>
+        <Label htmlFor="title" className="text-sm font-medium">
+          Titre de la tâche
+        </Label>
         <Input
           id="title"
           placeholder="Entrez le titre de la tâche..."
           {...register("title")}
-          className={errors.title ? "border-destructive" : ""}
+          className={cn("w-full", errors.title && "border-destructive")}
         />
         {errors.title && (
           <p className="text-sm text-destructive">{errors.title.message}</p>
         )}
       </div>
 
+      {/* Description */}
       <div className="space-y-2">
-        <Label htmlFor="description">Description (Optionnel)</Label>
+        <Label htmlFor="description" className="text-sm font-medium">
+          Description (Optionnel)
+        </Label>
         <Textarea
           id="description"
           placeholder="Décrivez la tâche..."
           rows={3}
           {...register("description")}
-          className={errors.description ? "border-destructive" : ""}
+          className={cn(
+            "w-full resize-none",
+            errors.description && "border-destructive"
+          )}
         />
         {errors.description && (
           <p className="text-sm text-destructive">
@@ -282,15 +304,16 @@ export function TaskForm({
         )}
       </div>
 
-      <div className="grid grid-cols-3 gap-4">
+      {/* Statut, Priorité, Projet - Grid responsive */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <div className="space-y-2">
-          <Label>Statut</Label>
+          <Label className="text-sm font-medium">Statut</Label>
           <Controller
             name="status"
             control={control}
             render={({ field }) => (
               <Select value={field.value} onValueChange={field.onChange}>
-                <SelectTrigger>
+                <SelectTrigger className="w-full">
                   <SelectValue placeholder="Sélectionner le statut" />
                 </SelectTrigger>
                 <SelectContent>
@@ -304,13 +327,13 @@ export function TaskForm({
         </div>
 
         <div className="space-y-2">
-          <Label>Priorité</Label>
+          <Label className="text-sm font-medium">Priorité</Label>
           <Controller
             name="priority"
             control={control}
             render={({ field }) => (
               <Select value={field.value} onValueChange={field.onChange}>
-                <SelectTrigger>
+                <SelectTrigger className="w-full">
                   <SelectValue placeholder="Sélectionner la priorité" />
                 </SelectTrigger>
                 <SelectContent>
@@ -323,8 +346,8 @@ export function TaskForm({
           />
         </div>
 
-        <div className="space-y-2">
-          <Label>Projet</Label>
+        <div className="space-y-2 sm:col-span-2 lg:col-span-1">
+          <Label className="text-sm font-medium">Projet</Label>
           <Controller
             name="project_id"
             control={control}
@@ -334,7 +357,7 @@ export function TaskForm({
                 onValueChange={field.onChange}
                 disabled={!!projectId}
               >
-                <SelectTrigger>
+                <SelectTrigger className="w-full">
                   <SelectValue placeholder="Sélectionner le projet" />
                 </SelectTrigger>
                 <SelectContent>
@@ -355,8 +378,9 @@ export function TaskForm({
         </div>
       </div>
 
+      {/* Date d'échéance */}
       <div className="space-y-2">
-        <Label>Date d'échéance</Label>
+        <Label className="text-sm font-medium">Date d'échéance</Label>
         <Controller
           name="due_date"
           control={control}
@@ -373,13 +397,23 @@ export function TaskForm({
         )}
       </div>
 
-      <div className="flex justify-end space-x-2 pt-4">
+      {/* Actions - Stack sur mobile, inline sur desktop */}
+      <div className="flex flex-col-reverse sm:flex-row justify-end gap-3 sm:gap-2 pt-4">
         {onCancel && (
-          <Button type="button" variant="outline" onClick={onCancel}>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={onCancel}
+            className="w-full sm:w-auto"
+          >
             Annuler
           </Button>
         )}
-        <Button type="submit" disabled={isSubmitting || isLoading}>
+        <Button
+          type="submit"
+          disabled={isSubmitting || isLoading}
+          className="w-full sm:w-auto"
+        >
           {(isSubmitting || isLoading) && (
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
           )}

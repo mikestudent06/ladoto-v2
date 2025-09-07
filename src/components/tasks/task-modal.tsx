@@ -128,31 +128,44 @@ export function TaskModal({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent
         className={cn(
-          isViewing
-            ? "max-h-full"
-            : "w-full sm:max-w-[1100px] max-h-[calc(100vh-100px)] overflow-y-scroll"
+          // Base: mobile-first responsive design
+          "w-full max-w-full h-full max-h-screen overflow-y-auto",
+          // Sur mobile (default): plein écran
+          "sm:max-w-lg sm:h-auto sm:max-h-[90vh]",
+          // Sur desktop: taille adaptée au contenu
+          "md:max-w-2xl lg:max-w-3xl",
+          // Padding adaptatif
+          "p-4 sm:p-6",
+          // Mode formulaire: plus d'espace sur desktop
+          !isViewing && "sm:max-w-2xl md:max-w-3xl lg:max-w-4xl"
         )}
       >
-        <DialogHeader>
-          <DialogTitle>
+        <DialogHeader className="space-y-2 sm:space-y-3">
+          <DialogTitle className="text-lg sm:text-xl">
             {isCreating && "Créer une nouvelle tâche"}
             {isEditing && !isViewing && "Modifier la tâche"}
             {isViewing && !editMode && "Détails de la tâche"}
           </DialogTitle>
-          <DialogDescription>
+          <DialogDescription className="text-sm sm:text-base">
             {isCreating && "Ajouter une nouvelle tâche à votre projet."}
-            {isEditing && !isViewing && "Apporter des modifications à votre tâche ici."}
-            {isViewing && !editMode && "Consulter les détails et informations de la tâche."}
+            {isEditing &&
+              !isViewing &&
+              "Apporter des modifications à votre tâche ici."}
+            {isViewing &&
+              !editMode &&
+              "Consulter les détails et informations de la tâche."}
           </DialogDescription>
         </DialogHeader>
 
         {isViewing && !editMode ? (
           // Mode Visualisation - Détails de la tâche en lecture seule
-          <div className="space-y-6">
-            <div className="space-y-4">
-              <div>
-                <h3 className="text-lg font-semibold">{task?.title}</h3>
-                <div className="flex items-center space-x-2 mt-2">
+          <div className="space-y-4 sm:space-y-6">
+            <div className="space-y-3 sm:space-y-4">
+              <div className="space-y-3">
+                <h3 className="text-base sm:text-lg font-semibold leading-tight">
+                  {task?.title}
+                </h3>
+                <div className="flex flex-wrap items-center gap-2">
                   <Badge
                     variant={getStatusColor(task?.status!)}
                     className="text-xs"
@@ -170,70 +183,85 @@ export function TaskModal({
               </div>
 
               {task?.description && (
-                <div>
-                  <h4 className="text-sm font-medium text-muted-foreground mb-2">
+                <div className="space-y-2">
+                  <h4 className="text-sm font-medium text-muted-foreground">
                     Description
                   </h4>
-                  <p className="text-sm">{task.description}</p>
+                  <p className="text-sm leading-relaxed">{task.description}</p>
                 </div>
               )}
 
-              <div className="grid grid-cols-2 gap-4">
+              {/* Grid responsive: 1 colonne sur mobile, 2 sur desktop */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {task?.project && (
-                  <div>
-                    <h4 className="text-sm font-medium text-muted-foreground mb-2">
+                  <div className="space-y-2">
+                    <h4 className="text-sm font-medium text-muted-foreground">
                       Projet
                     </h4>
-                    <div className="flex items-center space-x-1">
-                      <Folder className="h-4 w-4" />
-                      <span className="text-sm">{task.project.name}</span>
+                    <div className="flex items-center space-x-2">
+                      <Folder className="h-4 w-4 flex-shrink-0" />
+                      <span className="text-sm truncate">
+                        {task.project.name}
+                      </span>
                     </div>
                   </div>
                 )}
 
                 {task?.due_date && (
-                  <div>
-                    <h4 className="text-sm font-medium text-muted-foreground mb-2">
+                  <div className="space-y-2">
+                    <h4 className="text-sm font-medium text-muted-foreground">
                       Date d'échéance
                     </h4>
                     <div
-                      className={`flex items-center space-x-1 text-sm ${
+                      className={`flex items-center space-x-2 text-sm ${
                         isOverdue ? "text-red-600" : ""
                       }`}
                     >
-                      <Calendar className="h-4 w-4" />
+                      <Calendar className="h-4 w-4 flex-shrink-0" />
                       <span>{formatDate(task.due_date)}</span>
                       {isOverdue && (
-                        <span className="text-xs font-medium">(En retard)</span>
+                        <span className="text-xs font-medium whitespace-nowrap">
+                          (En retard)
+                        </span>
                       )}
                     </div>
                   </div>
                 )}
               </div>
 
-              <div className="grid grid-cols-2 gap-4 text-sm">
-                <div>
-                  <h4 className="text-sm font-medium text-muted-foreground mb-2">
+              {/* Dates de création/modification */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+                <div className="space-y-2">
+                  <h4 className="text-sm font-medium text-muted-foreground">
                     Créé
                   </h4>
-                  <span>{formatDate(task?.created_at!)}</span>
+                  <span className="text-sm">
+                    {formatDate(task?.created_at!)}
+                  </span>
                 </div>
                 {task?.updated_at !== task?.created_at && (
-                  <div>
-                    <h4 className="text-sm font-medium text-muted-foreground mb-2">
+                  <div className="space-y-2">
+                    <h4 className="text-sm font-medium text-muted-foreground">
                       Dernière mise à jour
                     </h4>
-                    <span>{formatDate(task?.updated_at!)}</span>
+                    <span className="text-sm">
+                      {formatDate(task?.updated_at!)}
+                    </span>
                   </div>
                 )}
               </div>
             </div>
 
-            <div className="flex justify-end space-x-2 pt-4 border-t">
-              <Button variant="outline" onClick={onClose}>
+            {/* Actions - Stack sur mobile, inline sur desktop */}
+            <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-2 sm:gap-2 pt-4 border-t">
+              <Button
+                variant="outline"
+                onClick={onClose}
+                className="w-full sm:w-auto"
+              >
                 Fermer
               </Button>
-              <Button onClick={handleEdit}>
+              <Button onClick={handleEdit} className="w-full sm:w-auto">
                 <Edit className="h-4 w-4 mr-2" />
                 Modifier la tâche
               </Button>
