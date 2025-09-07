@@ -31,7 +31,7 @@ export function DeleteProjectDialog({
       await deleteProject.mutateAsync(project.id);
       onClose();
     } catch (error) {
-      // Error handling is done in the mutation hook
+      // Gestion des erreurs dans le hook de mutation
     }
   };
 
@@ -39,16 +39,17 @@ export function DeleteProjectDialog({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[400px]">
         <DialogHeader>
-          <DialogTitle>Delete Project</DialogTitle>
+          <DialogTitle>Supprimer le projet</DialogTitle>
           <DialogDescription>
-            Are you sure you want to delete "{project.name}"? This action cannot
-            be undone. All tasks in this project will also be deleted.
+            Êtes-vous sûr de vouloir supprimer "{project.name}" ? Cette action
+            ne peut pas être annulée. Toutes les tâches de ce projet seront
+            également supprimées.
           </DialogDescription>
         </DialogHeader>
 
         <DialogFooter>
           <Button variant="outline" onClick={onClose}>
-            Cancel
+            Annuler
           </Button>
           <Button
             variant="destructive"
@@ -58,7 +59,7 @@ export function DeleteProjectDialog({
             {deleteProject.isPending && (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             )}
-            Delete Project
+            Supprimer le projet
           </Button>
         </DialogFooter>
       </DialogContent>

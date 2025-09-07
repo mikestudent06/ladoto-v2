@@ -49,7 +49,7 @@ export function ProjectModal({
       onClose();
       setEditMode(false);
     } catch (error) {
-      // Error handling is done in the mutation hooks
+      // Gestion des erreurs dans les hooks de mutation
     }
   };
 
@@ -79,7 +79,16 @@ export function ProjectModal({
   };
 
   const getStatusText = (status: Project["status"]) => {
-    return status.charAt(0).toUpperCase() + status.slice(1);
+    switch (status) {
+      case "active":
+        return "Actif";
+      case "completed":
+        return "Terminé";
+      case "archived":
+        return "Archivé";
+      default:
+        return status;
+    }
   };
 
   const taskCount = Array.isArray(project?.tasks) ? project.tasks.length : 0;
@@ -89,19 +98,24 @@ export function ProjectModal({
       <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
           <DialogTitle>
-            {isCreating && "Create New Project"}
-            {isEditing && !isViewing && "Edit Project"}
-            {isViewing && !editMode && "Project Details"}
+            {isCreating && "Créer un nouveau projet"}
+            {isEditing && !isViewing && "Modifier le projet"}
+            {isViewing && !editMode && "Détails du projet"}
           </DialogTitle>
           <DialogDescription>
-            {isCreating && "Add a new project to organize your tasks."}
-            {isEditing && !isViewing && "Make changes to your project here."}
-            {isViewing && !editMode && "View project details and information."}
+            {isCreating &&
+              "Ajoutez un nouveau projet pour organiser vos tâches."}
+            {isEditing &&
+              !isViewing &&
+              "Apportez des modifications à votre projet ici."}
+            {isViewing &&
+              !editMode &&
+              "Consultez les détails et informations du projet."}
           </DialogDescription>
         </DialogHeader>
 
         {isViewing && !editMode ? (
-          // View Mode - Read-only project details
+          // Mode Visualisation - Détails du projet en lecture seule
           <div className="space-y-6">
             <div className="space-y-4">
               <div>
@@ -126,16 +140,16 @@ export function ProjectModal({
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <h4 className="text-sm font-medium text-muted-foreground mb-2">
-                    Tasks
+                    Tâches
                   </h4>
                   <div className="flex items-center space-x-1">
                     <CheckSquare className="h-4 w-4" />
-                    <span className="text-sm">{taskCount} tasks</span>
+                    <span className="text-sm">{taskCount} tâches</span>
                   </div>
                 </div>
                 <div>
                   <h4 className="text-sm font-medium text-muted-foreground mb-2">
-                    Created
+                    Créé
                   </h4>
                   <div className="flex items-center space-x-1">
                     <Calendar className="h-4 w-4" />
@@ -149,7 +163,7 @@ export function ProjectModal({
               {project?.updated_at !== project?.created_at && (
                 <div>
                   <h4 className="text-sm font-medium text-muted-foreground mb-2">
-                    Last Updated
+                    Dernière mise à jour
                   </h4>
                   <span className="text-sm">
                     {formatDate(project?.updated_at!)}
@@ -160,16 +174,16 @@ export function ProjectModal({
 
             <div className="flex justify-end space-x-2 pt-4 border-t">
               <Button variant="outline" onClick={onClose}>
-                Close
+                Fermer
               </Button>
               <Button onClick={handleEdit}>
                 <Edit className="h-4 w-4 mr-2" />
-                Edit Project
+                Modifier le projet
               </Button>
             </div>
           </div>
         ) : (
-          // Create/Edit Mode - Form
+          // Mode Création/Modification - Formulaire
           <ProjectForm
             project={project}
             onSubmit={handleSubmit}

@@ -50,18 +50,27 @@ export function TaskCard({
   const getStatusText = (status: Task["status"]) => {
     switch (status) {
       case "todo":
-        return "To Do";
+        return "À faire";
       case "in_progress":
-        return "In Progress";
+        return "En cours";
       case "done":
-        return "Done";
+        return "Terminé";
       default:
         return status;
     }
   };
 
   const getPriorityText = (priority: Task["priority"]) => {
-    return priority.charAt(0).toUpperCase() + priority.slice(1);
+    switch (priority) {
+      case "high":
+        return "Haute";
+      case "medium":
+        return "Moyenne";
+      case "low":
+        return "Basse";
+      default:
+        return priority;
+    }
   };
 
   const isOverdue =
@@ -76,7 +85,7 @@ export function TaskCard({
           <h4 className="font-medium text-sm truncate">{task.title}</h4>
           {showProject && task.project && (
             <p className="text-xs text-muted-foreground mt-1">
-              {task.project.name}
+              dans {task.project.name}
             </p>
           )}
         </div>
@@ -87,7 +96,7 @@ export function TaskCard({
             onClick={() => onView?.(task)}
             className="h-8 px-2"
           >
-            View
+            Voir
           </Button>
           <Button
             variant="ghost"
@@ -95,7 +104,7 @@ export function TaskCard({
             onClick={() => onEdit?.(task)}
             className="h-8 px-2"
           >
-            Edit
+            Modifier
           </Button>
           <Button
             variant="ghost"
@@ -103,7 +112,7 @@ export function TaskCard({
             onClick={() => onDelete?.(task)}
             className="h-8 px-2"
           >
-            Delete
+            Supprimer
           </Button>
         </div>
       </div>

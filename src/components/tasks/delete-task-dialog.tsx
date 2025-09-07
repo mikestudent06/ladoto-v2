@@ -31,7 +31,7 @@ export function DeleteTaskDialog({
       await deleteTask.mutateAsync(task.id);
       onClose();
     } catch (error) {
-      // Error handling is done in the mutation hook
+      // Gestion des erreurs dans le hook de mutation
     }
   };
 
@@ -39,16 +39,16 @@ export function DeleteTaskDialog({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[400px]">
         <DialogHeader>
-          <DialogTitle>Delete Task</DialogTitle>
+          <DialogTitle>Supprimer la tâche</DialogTitle>
           <DialogDescription>
-            Are you sure you want to delete "{task.title}"? This action cannot
-            be undone.
+            Êtes-vous sûr de vouloir supprimer "{task.title}" ? Cette action ne
+            peut pas être annulée.
           </DialogDescription>
         </DialogHeader>
 
         <DialogFooter>
           <Button variant="outline" onClick={onClose}>
-            Cancel
+            Annuler
           </Button>
           <Button
             variant="destructive"
@@ -58,7 +58,7 @@ export function DeleteTaskDialog({
             {deleteTask.isPending && (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             )}
-            Delete Task
+            Supprimer la tâche
           </Button>
         </DialogFooter>
       </DialogContent>

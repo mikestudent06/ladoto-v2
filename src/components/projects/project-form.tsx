@@ -54,10 +54,10 @@ export function ProjectForm({
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
       <div className="space-y-2">
-        <Label htmlFor="name">Project Name</Label>
+        <Label htmlFor="name">Nom du projet</Label>
         <Input
           id="name"
-          placeholder="Enter project name..."
+          placeholder="Entrez le nom du projet..."
           {...register("name")}
           className={errors.name ? "border-destructive" : ""}
         />
@@ -67,10 +67,10 @@ export function ProjectForm({
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="description">Description (Optional)</Label>
+        <Label htmlFor="description">Description (Optionnel)</Label>
         <Textarea
           id="description"
-          placeholder="Describe your project..."
+          placeholder="Décrivez votre projet..."
           {...register("description")}
           className={errors.description ? "border-destructive" : ""}
         />
@@ -83,18 +83,18 @@ export function ProjectForm({
 
       {isEditing && (
         <div className="space-y-2">
-          <Label htmlFor="status">Status</Label>
+          <Label htmlFor="status">Statut</Label>
           <Select
             value={status}
             onValueChange={(value) => setValue("status", value as any)}
           >
             <SelectTrigger>
-              <SelectValue placeholder="Select status" />
+              <SelectValue placeholder="Sélectionner le statut" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="active">Active</SelectItem>
-              <SelectItem value="completed">Completed</SelectItem>
-              <SelectItem value="archived">Archived</SelectItem>
+              <SelectItem value="active">Actif</SelectItem>
+              <SelectItem value="completed">Terminé</SelectItem>
+              <SelectItem value="archived">Archivé</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -103,14 +103,14 @@ export function ProjectForm({
       <div className="flex justify-end space-x-2 pt-4">
         {onCancel && (
           <Button type="button" variant="outline" onClick={onCancel}>
-            Cancel
+            Annuler
           </Button>
         )}
         <Button type="submit" disabled={isSubmitting || isLoading}>
           {(isSubmitting || isLoading) && (
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
           )}
-          {isEditing ? "Update Project" : "Create Project"}
+          {isEditing ? "Modifier le projet" : "Créer le projet"}
         </Button>
       </div>
     </form>

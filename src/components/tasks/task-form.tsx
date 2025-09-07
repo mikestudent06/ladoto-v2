@@ -114,7 +114,7 @@ function DatePicker({
 
   return (
     <div className="space-y-3">
-      {/* Quick Date Options */}
+      {/* Options de date rapides */}
       <div className="grid grid-cols-2 gap-2">
         {quickDateOptions.map((option) => {
           const Icon = option.icon;
@@ -148,7 +148,7 @@ function DatePicker({
         })}
       </div>
 
-      {/* Custom Date Picker */}
+      {/* Sélecteur de date personnalisé */}
       <div className="flex items-center space-x-2">
         <div className="flex-1 h-px bg-border" />
         <span className="text-xs text-muted-foreground px-2">ou</span>

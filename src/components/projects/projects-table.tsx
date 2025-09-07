@@ -23,7 +23,7 @@ export function ProjectsTable({
   const columns: TableColumn<Project>[] = [
     {
       key: "name",
-      label: "Project Name",
+      label: "Nom du projet",
       sortable: true,
       render: (value, project) => (
         <div>
@@ -39,7 +39,7 @@ export function ProjectsTable({
     },
     {
       key: "status",
-      label: "Status",
+      label: "Statut",
       sortable: true,
       filterable: true,
       render: (value) => {
@@ -56,17 +56,28 @@ export function ProjectsTable({
           }
         };
 
+        const getStatusText = (status: Project["status"]) => {
+          switch (status) {
+            case "active":
+              return "Actif";
+            case "completed":
+              return "Terminé";
+            case "archived":
+              return "Archivé";
+            default:
+              return status;
+          }
+        };
+
         return (
-          <Badge variant={getStatusColor(value)}>
-            {value.charAt(0).toUpperCase() + value.slice(1)}
-          </Badge>
+          <Badge variant={getStatusColor(value)}>{getStatusText(value)}</Badge>
         );
       },
       width: "15%",
     },
     {
       key: "tasks",
-      label: "Tasks",
+      label: "Tâches",
       render: (value) => {
         const taskCount = Array.isArray(value)
           ? value.length
@@ -74,7 +85,7 @@ export function ProjectsTable({
         return (
           <div className="text-center">
             <span className="font-medium">{taskCount}</span>
-            <span className="text-muted-foreground"> tasks</span>
+            <span className="text-muted-foreground"> tâches</span>
           </div>
         );
       },
@@ -82,14 +93,14 @@ export function ProjectsTable({
     },
     {
       key: "created_at",
-      label: "Created",
+      label: "Créé",
       sortable: true,
       render: (value) => <div className="text-sm">{formatDate(value)}</div>,
       width: "20%",
     },
     {
       key: "updated_at",
-      label: "Last Updated",
+      label: "Dernière mise à jour",
       sortable: true,
       render: (value) => (
         <div className="text-sm text-muted-foreground">{formatDate(value)}</div>
@@ -99,7 +110,7 @@ export function ProjectsTable({
   ];
 
   const handleBulkDelete = async (projects: Project[]) => {
-    // Delete projects one by one (could be optimized with bulk API)
+    // Supprimer les projets un par un (pourrait être optimisé avec une API de suppression en lot)
     for (const project of projects) {
       await deleteProject.mutateAsync(project.id);
     }
@@ -115,8 +126,8 @@ export function ProjectsTable({
       onView={onView}
       onBulkDelete={handleBulkDelete}
       onExport={onExport}
-      searchPlaceholder="Search projects..."
-      emptyMessage="No projects found. Create your first project to get started."
+      searchPlaceholder="Rechercher des projets..."
+      emptyMessage="Aucun projet trouvé. Créez votre premier projet pour commencer."
     />
   );
 }

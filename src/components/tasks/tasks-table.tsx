@@ -31,7 +31,7 @@ export function TasksTable({
   const columns: TableColumn<Task>[] = [
     {
       key: "title",
-      label: "Task",
+      label: "Tâche",
       sortable: true,
       render: (value, task) => (
         <div>
@@ -43,7 +43,7 @@ export function TasksTable({
           )}
           {task.project && (
             <div className="text-xs text-muted-foreground mt-1">
-              in {task.project.name}
+              dans {task.project.name}
             </div>
           )}
         </div>
@@ -52,7 +52,7 @@ export function TasksTable({
     },
     {
       key: "status",
-      label: "Status",
+      label: "Statut",
       sortable: true,
       filterable: true,
       render: (value, task) => {
@@ -67,9 +67,9 @@ export function TasksTable({
             }
             className="bg-transparent border-none text-sm font-medium focus:outline-none"
           >
-            <option value="todo">To Do</option>
-            <option value="in_progress">In Progress</option>
-            <option value="done">Done</option>
+            <option value="todo">À faire</option>
+            <option value="in_progress">En cours</option>
+            <option value="done">Terminé</option>
           </select>
         );
       },
@@ -77,7 +77,7 @@ export function TasksTable({
     },
     {
       key: "priority",
-      label: "Priority",
+      label: "Priorité",
       sortable: true,
       filterable: true,
       render: (value) => {
@@ -94,10 +94,23 @@ export function TasksTable({
           }
         };
 
+        const getPriorityText = (priority: Task["priority"]) => {
+          switch (priority) {
+            case "high":
+              return "Haute";
+            case "medium":
+              return "Moyenne";
+            case "low":
+              return "Basse";
+            default:
+              return priority;
+          }
+        };
+
         return (
           <Badge variant={getPriorityColor(value)} className="gap-1">
             <Flag className="h-3 w-3" />
-            {value.charAt(0).toUpperCase() + value.slice(1)}
+            {getPriorityText(value)}
           </Badge>
         );
       },
@@ -105,7 +118,7 @@ export function TasksTable({
     },
     {
       key: "due_date",
-      label: "Due Date",
+      label: "Date d'échéance",
       sortable: true,
       render: (value, task) => {
         if (!value) return <span className="text-muted-foreground">-</span>;
@@ -128,7 +141,7 @@ export function TasksTable({
     },
     {
       key: "updated_at",
-      label: "Updated",
+      label: "Mis à jour",
       sortable: true,
       render: (value) => (
         <div className="text-sm text-muted-foreground">{formatDate(value)}</div>
@@ -138,7 +151,7 @@ export function TasksTable({
   ];
 
   const handleBulkDelete = async (tasks: Task[]) => {
-    // Delete tasks one by one (could be optimized with bulk API)
+    // Supprimer les tâches une par une (pourrait être optimisé avec une API de suppression en lot)
     for (const task of tasks) {
       await deleteTask.mutateAsync(task.id);
     }
@@ -154,8 +167,8 @@ export function TasksTable({
       onView={onView}
       onBulkDelete={handleBulkDelete}
       onExport={onExport}
-      searchPlaceholder="Search tasks..."
-      emptyMessage="No tasks found. Create your first task to get started."
+      searchPlaceholder="Rechercher des tâches..."
+      emptyMessage="Aucune tâche trouvée. Créez votre première tâche pour commencer."
     />
   );
 }

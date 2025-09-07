@@ -32,19 +32,17 @@ export function ProjectCard({
   const getStatusText = (status: Project["status"]) => {
     switch (status) {
       case "active":
-        return "Active";
+        return "Actif";
       case "completed":
-        return "Completed";
+        return "Terminé";
       case "archived":
-        return "Archived";
+        return "Archivé";
       default:
         return status;
     }
   };
 
-  const taskCount = Array.isArray(project.tasks)
-    ? project.tasks.length
-    : 0;
+  const taskCount = Array.isArray(project.tasks) ? project.tasks.length : 0;
 
   return (
     <div className="bg-white rounded-lg border p-6 hover:shadow-md transition-shadow">
@@ -57,13 +55,13 @@ export function ProjectCard({
         </div>
         <div className="flex items-center space-x-1 ml-2">
           <Button variant="ghost" size="sm" onClick={() => onView?.(project)}>
-            View
+            Voir
           </Button>
           <Button variant="ghost" size="sm" onClick={() => onEdit?.(project)}>
-            Edit
+            Modifier
           </Button>
           <Button variant="ghost" size="sm" onClick={() => onDelete?.(project)}>
-            Delete
+            Supprimer
           </Button>
         </div>
       </div>
@@ -78,11 +76,11 @@ export function ProjectCard({
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-1">
             <CheckSquare className="h-4 w-4" />
-            <span>{taskCount} tasks</span>
+            <span>{taskCount} tâches</span>
           </div>
           <div className="flex items-center space-x-1">
             <Calendar className="h-4 w-4" />
-            <span>Created {formatDate(project.created_at)}</span>
+            <span>Créé le {formatDate(project.created_at)}</span>
           </div>
         </div>
       </div>

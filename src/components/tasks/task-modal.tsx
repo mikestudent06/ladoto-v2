@@ -51,7 +51,7 @@ export function TaskModal({
       onClose();
       setEditMode(false);
     } catch (error) {
-      // Error handling is done in the mutation hooks
+      // Gestion des erreurs dans les hooks de mutation
     }
   };
 
@@ -96,18 +96,27 @@ export function TaskModal({
   const getStatusText = (status: Task["status"]) => {
     switch (status) {
       case "todo":
-        return "To Do";
+        return "À faire";
       case "in_progress":
-        return "In Progress";
+        return "En cours";
       case "done":
-        return "Done";
+        return "Terminé";
       default:
         return status;
     }
   };
 
   const getPriorityText = (priority: Task["priority"]) => {
-    return priority.charAt(0).toUpperCase() + priority.slice(1);
+    switch (priority) {
+      case "high":
+        return "Haute";
+      case "medium":
+        return "Moyenne";
+      case "low":
+        return "Basse";
+      default:
+        return priority;
+    }
   };
 
   const isOverdue =
@@ -126,19 +135,19 @@ export function TaskModal({
       >
         <DialogHeader>
           <DialogTitle>
-            {isCreating && "Create New Task"}
-            {isEditing && !isViewing && "Edit Task"}
-            {isViewing && !editMode && "Task Details"}
+            {isCreating && "Créer une nouvelle tâche"}
+            {isEditing && !isViewing && "Modifier la tâche"}
+            {isViewing && !editMode && "Détails de la tâche"}
           </DialogTitle>
           <DialogDescription>
-            {isCreating && "Add a new task to your project."}
-            {isEditing && !isViewing && "Make changes to your task here."}
-            {isViewing && !editMode && "View task details and information."}
+            {isCreating && "Ajouter une nouvelle tâche à votre projet."}
+            {isEditing && !isViewing && "Apporter des modifications à votre tâche ici."}
+            {isViewing && !editMode && "Consulter les détails et informations de la tâche."}
           </DialogDescription>
         </DialogHeader>
 
         {isViewing && !editMode ? (
-          // View Mode - Read-only task details
+          // Mode Visualisation - Détails de la tâche en lecture seule
           <div className="space-y-6">
             <div className="space-y-4">
               <div>
@@ -173,7 +182,7 @@ export function TaskModal({
                 {task?.project && (
                   <div>
                     <h4 className="text-sm font-medium text-muted-foreground mb-2">
-                      Project
+                      Projet
                     </h4>
                     <div className="flex items-center space-x-1">
                       <Folder className="h-4 w-4" />
@@ -185,7 +194,7 @@ export function TaskModal({
                 {task?.due_date && (
                   <div>
                     <h4 className="text-sm font-medium text-muted-foreground mb-2">
-                      Due Date
+                      Date d'échéance
                     </h4>
                     <div
                       className={`flex items-center space-x-1 text-sm ${
@@ -195,7 +204,7 @@ export function TaskModal({
                       <Calendar className="h-4 w-4" />
                       <span>{formatDate(task.due_date)}</span>
                       {isOverdue && (
-                        <span className="text-xs font-medium">(Overdue)</span>
+                        <span className="text-xs font-medium">(En retard)</span>
                       )}
                     </div>
                   </div>
@@ -205,14 +214,14 @@ export function TaskModal({
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
                   <h4 className="text-sm font-medium text-muted-foreground mb-2">
-                    Created
+                    Créé
                   </h4>
                   <span>{formatDate(task?.created_at!)}</span>
                 </div>
                 {task?.updated_at !== task?.created_at && (
                   <div>
                     <h4 className="text-sm font-medium text-muted-foreground mb-2">
-                      Last Updated
+                      Dernière mise à jour
                     </h4>
                     <span>{formatDate(task?.updated_at!)}</span>
                   </div>
@@ -222,16 +231,16 @@ export function TaskModal({
 
             <div className="flex justify-end space-x-2 pt-4 border-t">
               <Button variant="outline" onClick={onClose}>
-                Close
+                Fermer
               </Button>
               <Button onClick={handleEdit}>
                 <Edit className="h-4 w-4 mr-2" />
-                Edit Task
+                Modifier la tâche
               </Button>
             </div>
           </div>
         ) : (
-          // Create/Edit Mode - Form
+          // Mode Création/Modification - Formulaire
           <TaskForm
             task={task}
             projectId={projectId}
