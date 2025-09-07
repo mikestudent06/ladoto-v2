@@ -26,7 +26,7 @@ export function DashboardPage() {
   } = useDashboardStats();
 
   if (projectsLoading || statsLoading) {
-    return <LoadingSpinner text="Loading dashboard..." />;
+    return <LoadingSpinner text="Chargement du tableau de bord..." />;
   }
 
   if (projectsError || statsError) {
@@ -34,7 +34,7 @@ export function DashboardPage() {
       <Alert>
         <AlertCircle className="h-4 w-4" />
         <AlertDescription>
-          Failed to load dashboard data. Please try again.
+          Échec du chargement des données. Veuillez réessayer.
         </AlertDescription>
       </Alert>
     );
@@ -45,13 +45,13 @@ export function DashboardPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold">Dashboard</h1>
+        <h1 className="text-3xl font-bold">Tableau de bord</h1>
         <p className="text-muted-foreground">
-          Welcome back! Here's an overview of your projects and tasks.
+          Bon retour ! Voici un aperçu de vos projets et tâches.
         </p>
       </div>
 
-      {/* Stats Cards */}
+      {/* Cartes de statistiques */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <div className="bg-white p-6 rounded-lg border">
           <div className="flex items-center space-x-2">
@@ -60,7 +60,7 @@ export function DashboardPage() {
             </div>
             <div>
               <p className="text-sm font-medium text-muted-foreground">
-                Total Projects
+                Total des projets
               </p>
               <p className="text-2xl font-bold">{projects?.length || 0}</p>
             </div>
@@ -74,7 +74,7 @@ export function DashboardPage() {
             </div>
             <div>
               <p className="text-sm font-medium text-muted-foreground">
-                Tasks Completed
+                Tâches terminées
               </p>
               <p className="text-2xl font-bold">{stats?.completed || 0}</p>
             </div>
@@ -88,7 +88,7 @@ export function DashboardPage() {
             </div>
             <div>
               <p className="text-sm font-medium text-muted-foreground">
-                In Progress
+                En cours
               </p>
               <p className="text-2xl font-bold">{stats?.inProgress || 0}</p>
             </div>
@@ -102,7 +102,7 @@ export function DashboardPage() {
             </div>
             <div>
               <p className="text-sm font-medium text-muted-foreground">
-                High Priority
+                Priorité élevée
               </p>
               <p className="text-2xl font-bold">{stats?.highPriority || 0}</p>
             </div>
@@ -110,41 +110,41 @@ export function DashboardPage() {
         </div>
       </div>
 
-      {/* Quick Actions */}
+      {/* Actions rapides */}
       <div className="bg-white p-6 rounded-lg border">
-        <h2 className="text-lg font-semibold mb-4">Quick Actions</h2>
+        <h2 className="text-lg font-semibold mb-4">Actions rapides</h2>
         <div className="flex flex-wrap gap-3">
           <Link to="/dashboard/projects">
             <Button>
               <Plus className="h-4 w-4 mr-2" />
-              New Project
+              Nouveau projet
             </Button>
           </Link>
           <Link to="/dashboard/tasks">
             <Button variant="outline">
               <Plus className="h-4 w-4 mr-2" />
-              New Task
+              Nouvelle tâche
             </Button>
           </Link>
         </div>
       </div>
 
-      {/* Recent Projects */}
+      {/* Projets récents */}
       <div className="bg-white p-6 rounded-lg border">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold">Recent Projects</h2>
+          <h2 className="text-lg font-semibold">Projets récents</h2>
           <Link to="/dashboard/projects">
             <Button variant="outline" size="sm">
-              View All
+              Voir tout
             </Button>
           </Link>
         </div>
 
         {recentProjects.length === 0 ? (
           <div className="text-center py-8">
-            <p className="text-muted-foreground mb-4">No projects yet</p>
+            <p className="text-muted-foreground mb-4">Aucun projet pour le moment</p>
             <Link to="/dashboard/projects">
-              <Button>Create Your First Project</Button>
+              <Button>Créer votre premier projet</Button>
             </Link>
           </div>
         ) : (
@@ -168,7 +168,7 @@ export function DashboardPage() {
                     {Array.isArray(project.tasks)
                       ? project.tasks.length
                       : 0}{" "}
-                    task(s)
+                    tâche(s)
                   </p>
                 </div>
               </div>

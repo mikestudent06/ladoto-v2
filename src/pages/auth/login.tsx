@@ -46,9 +46,9 @@ export function LoginPage() {
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h1 className="text-2xl font-bold">Welcome back</h1>
+        <h1 className="text-2xl font-bold">Bon retour</h1>
         <p className="text-muted-foreground mt-2">
-          Sign in to your account to continue
+          Connectez-vous à votre compte pour continuer
         </p>
       </div>
 
@@ -58,7 +58,7 @@ export function LoginPage() {
           <Input
             id="email"
             type="email"
-            placeholder="john@example.com"
+            placeholder="jean@exemple.com"
             {...register("email")}
             className={errors.email ? "border-destructive" : ""}
           />
@@ -68,7 +68,7 @@ export function LoginPage() {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="password">Password</Label>
+          <Label htmlFor="password">Mot de passe</Label>
           <div className="relative">
             <Input
               id="password"
@@ -104,18 +104,18 @@ export function LoginPage() {
           {isSubmitting || loading ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Signing In...
+              Connexion en cours...
             </>
           ) : (
-            "Sign In"
+            "Se connecter"
           )}
         </Button>
       </form>
 
       <div className="text-center text-sm">
-        <span className="text-muted-foreground">Don't have an account? </span>
+        <span className="text-muted-foreground">Pas de compte ? </span>
         <Link to="/auth/register" className="text-primary hover:underline">
-          Sign up
+          S'inscrire
         </Link>
       </div>
     </div>

@@ -1,22 +1,14 @@
 import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
-import {
-  Home,
-  Folder,
-  CheckSquare,
-  User,
-  LogOut,
-  Menu,
-  X,
-} from "lucide-react";
+import { Home, Folder, CheckSquare, User, LogOut, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { useAuthStore } from "@/store/auth-store";
 
 const navigation = [
-  { name: "Dashboard", href: "/dashboard", icon: Home },
-  { name: "Projects", href: "/dashboard/projects", icon: Folder },
-  { name: "Tasks", href: "/dashboard/tasks", icon: CheckSquare },
+  { name: "Tableau de bord", href: "/dashboard", icon: Home },
+  { name: "Projets", href: "/dashboard/projects", icon: Folder },
+  { name: "Tâches", href: "/dashboard/tasks", icon: CheckSquare },
 ];
 
 export function DashboardLayout() {
@@ -33,7 +25,7 @@ export function DashboardLayout() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Mobile sidebar overlay */}
+      {/* Overlay sidebar mobile */}
       {sidebarOpen && (
         <div
           className="fixed inset-0 z-40 lg:hidden"
@@ -55,9 +47,9 @@ export function DashboardLayout() {
           <div className="flex items-center justify-between h-12 px-6 border-b">
             <Link to="/dashboard" className="flex items-center space-x-2">
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                <span className="font-bold">T</span>
+                <span className="font-bold">L</span>
               </div>
-              <span className="font-bold text-xl">TaskFlow</span>
+              <span className="font-bold text-xl">Latodo</span>
             </Link>
             <Button
               variant="ghost"
@@ -92,7 +84,7 @@ export function DashboardLayout() {
             })}
           </nav>
 
-          {/* User section */}
+          {/* Section utilisateur */}
           <div className="border-t p-4">
             <div className="flex items-center space-x-3 px-3 py-2">
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-200">
@@ -120,16 +112,16 @@ export function DashboardLayout() {
               onClick={handleLogout}
             >
               <LogOut className="h-4 w-4 mr-2" />
-              Logout
+              Se déconnecter
             </Button>
           </div>
         </div>
       </div>
 
-      {/* Main content */}
+      {/* Contenu principal */}
       <div className="lg:ml-64">
-        {/* Top bar */}
-        <header className="bg-white border-b px-4 py-4  h-12  lg:px-6">
+        {/* Barre supérieure */}
+        <header className="bg-white border-b px-4 py-4 h-12 lg:px-6">
           <div className="flex items-center justify-between">
             <Button
               variant="ghost"
@@ -142,13 +134,14 @@ export function DashboardLayout() {
 
             <div className="flex items-center space-x-4 ml-auto">
               <div className="text-sm text-gray-600">
-                Welcome back, {user?.full_name?.split(" ")[0] || "User"}! 👋
+                Bon retour, {user?.full_name?.split(" ")[0] || "Utilisateur"} !
+                👋
               </div>
             </div>
           </div>
         </header>
 
-        {/* Page content */}
+        {/* Contenu de la page */}
         <main className="p-4 lg:p-6">
           <Outlet />
         </main>

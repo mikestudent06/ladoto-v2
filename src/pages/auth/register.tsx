@@ -35,7 +35,7 @@ export function RegisterPage() {
     const success = await registerUser(data.email, data.password, data.name);
 
     if (success) {
-      // Redirect to login page after successful registration
+      // Redirection vers la page de connexion après inscription réussie
       navigate("/auth/login");
     }
   };
@@ -43,19 +43,19 @@ export function RegisterPage() {
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h1 className="text-2xl font-bold">Create your account</h1>
+        <h1 className="text-2xl font-bold">Créer votre compte</h1>
         <p className="text-muted-foreground mt-2">
-          Start managing your tasks like a pro
+          Commencez à gérer vos tâches comme un pro
         </p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="name">Full Name</Label>
+          <Label htmlFor="name">Nom complet</Label>
           <Input
             id="name"
             type="text"
-            placeholder="John Doe"
+            placeholder="Jean Dupont"
             {...register("name")}
             className={errors.name ? "border-destructive" : ""}
           />
@@ -69,7 +69,7 @@ export function RegisterPage() {
           <Input
             id="email"
             type="email"
-            placeholder="john@example.com"
+            placeholder="jean@exemple.com"
             {...register("email")}
             className={errors.email ? "border-destructive" : ""}
           />
@@ -79,7 +79,7 @@ export function RegisterPage() {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="password">Password</Label>
+          <Label htmlFor="password">Mot de passe</Label>
           <div className="relative">
             <Input
               id="password"
@@ -108,7 +108,7 @@ export function RegisterPage() {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="confirmPassword">Confirm Password</Label>
+          <Label htmlFor="confirmPassword">Confirmer le mot de passe</Label>
           <div className="relative">
             <Input
               id="confirmPassword"
@@ -146,18 +146,18 @@ export function RegisterPage() {
           {isSubmitting || loading ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Creating Account...
+              Création du compte...
             </>
           ) : (
-            "Create Account"
+            "Créer le compte"
           )}
         </Button>
       </form>
 
       <div className="text-center text-sm">
-        <span className="text-muted-foreground">Already have an account? </span>
+        <span className="text-muted-foreground">Déjà un compte ? </span>
         <Link to="/auth/login" className="text-primary hover:underline">
-          Sign in
+          Se connecter
         </Link>
       </div>
     </div>

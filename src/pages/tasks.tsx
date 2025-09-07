@@ -27,15 +27,15 @@ import type { Task, TaskFilters } from "@/types";
 export function TasksPage() {
   const [viewMode, setViewMode] = useState<ViewMode>("cards");
   const [filters, setFilters] = useState<TaskFilters>({});
-  const [searchInput, setSearchInput] = useState(""); // Your separate input state
-  const [debouncedSearch] = useDebounce(searchInput, 500); // Your 500ms debounce
+  const [searchInput, setSearchInput] = useState("");
+  const [debouncedSearch] = useDebounce(searchInput, 500);
 
-  // Your debounced search effect
+  // Effet de recherche avec débounce
   useEffect(() => {
     setFilters((prev) => ({ ...prev, search: debouncedSearch || undefined }));
   }, [debouncedSearch]);
 
-  // ✅ UNIFIED MODAL STATE - works for both card and table views
+  // État unifié du modal - fonctionne pour les vues cartes et tableau
   const [modalState, setModalState] = useState<{
     isOpen: boolean;
     mode: "create" | "edit" | "view";
@@ -57,7 +57,7 @@ export function TasksPage() {
   const { data: projects } = useProjects();
   const updateTaskStatus = useUpdateTaskStatus();
 
-  // Your smart loading state tracking
+  // Suivi intelligent de l'état de chargement
   const [hasInitiallyLoaded, setHasInitiallyLoaded] = useState(false);
 
   useEffect(() => {
@@ -66,7 +66,7 @@ export function TasksPage() {
     }
   }, [tasks, hasInitiallyLoaded]);
 
-  // ✅ UNIFIED HANDLERS - work for both views
+  // Gestionnaires unifiés - fonctionnent pour les deux vues
   const handleCreateTask = () => {
     setModalState({ isOpen: true, mode: "create" });
   };
@@ -95,23 +95,23 @@ export function TasksPage() {
     setDeleteDialog({ isOpen: false, task: null });
   };
 
-  // Your improved search handler
+  // Gestionnaire de recherche amélioré
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchInput(e.target.value); // only update input
+    setSearchInput(e.target.value);
   };
 
   const handleExport = () => {
-    // Export tasks to CSV
+    // Exporter les tâches en CSV
     const csv = [
       [
-        "Title",
+        "Titre",
         "Description",
-        "Status",
-        "Priority",
-        "Project",
-        "Due Date",
-        "Created",
-        "Updated",
+        "Statut",
+        "Priorité",
+        "Projet",
+        "Date d'échéance",
+        "Créé",
+        "Modifié",
       ],
       ...(tasks?.map((task) => [
         task.title,
@@ -131,23 +131,23 @@ export function TasksPage() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `tasks-${new Date().toISOString().split("T")[0]}.csv`;
+    a.download = `taches-${new Date().toISOString().split("T")[0]}.csv`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   };
 
-  // Your smart loading logic
+  // Logique de chargement intelligente
   if (isLoading && !hasInitiallyLoaded) {
-    return <LoadingSpinner text="Loading tasks..." />;
+    return <LoadingSpinner text="Chargement des tâches..." />;
   }
 
   if (error) {
     return (
       <Alert>
         <AlertDescription>
-          Failed to load tasks. Please try again.
+          Échec du chargement des tâches. Veuillez réessayer.
         </AlertDescription>
       </Alert>
     );
@@ -155,36 +155,35 @@ export function TasksPage() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
+      {/* En-tête */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold">Tasks</h1>
+          <h1 className="text-3xl font-bold">Tâches</h1>
           <p className="text-muted-foreground">
-            View and manage all your tasks
+            Consultez et gérez toutes vos tâches
           </p>
         </div>
-        {/* ✅ ADD BUTTON - works in both views */}
         <Button onClick={handleCreateTask}>
           <Plus className="h-4 w-4 mr-2" />
-          New Task
+          Nouvelle tâche
         </Button>
       </div>
 
-      {/* Controls */}
+      {/* Contrôles */}
       <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
         <div className="flex flex-1 items-center gap-4">
-          {/* Filters - only show for card view, table has its own filters */}
+          {/* Filtres - uniquement pour la vue cartes, le tableau a ses propres filtres */}
           {viewMode === "cards" && (
             <>
               <div className="relative flex-1 max-w-sm">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder="Search tasks..."
-                  value={searchInput} // Your immediate user input
+                  placeholder="Rechercher des tâches..."
+                  value={searchInput}
                   onChange={handleSearch}
                   className="pl-10 pr-10"
                 />
-                {/* Your subtle loading indicator for search */}
+                {/* Indicateur de chargement subtil pour la recherche */}
                 {isFetching && hasInitiallyLoaded && (
                   <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
                     <div className="animate-spin rounded-full h-4 w-4 border-2 border-gray-300 border-t-gray-600"></div>
@@ -192,7 +191,6 @@ export function TasksPage() {
                 )}
               </div>
 
-              {/* Your fixed Select components using "all" instead of empty string */}
               <Select
                 value={filters.project_id || "all"}
                 onValueChange={(value) =>
@@ -203,10 +201,10 @@ export function TasksPage() {
                 }
               >
                 <SelectTrigger className="w-[200px]">
-                  <SelectValue placeholder="All Projects" />
+                  <SelectValue placeholder="Tous les projets" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Projects</SelectItem>
+                  <SelectItem value="all">Tous les projets</SelectItem>
                   {projects?.map((project) => (
                     <SelectItem key={project.id} value={project.id}>
                       {project.name}
@@ -226,13 +224,13 @@ export function TasksPage() {
                 }
               >
                 <SelectTrigger className="w-[150px]">
-                  <SelectValue placeholder="All Status" />
+                  <SelectValue placeholder="Tous les statuts" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Status</SelectItem>
-                  <SelectItem value="todo">To Do</SelectItem>
-                  <SelectItem value="in_progress">In Progress</SelectItem>
-                  <SelectItem value="done">Done</SelectItem>
+                  <SelectItem value="all">Tous les statuts</SelectItem>
+                  <SelectItem value="todo">À faire</SelectItem>
+                  <SelectItem value="in_progress">En cours</SelectItem>
+                  <SelectItem value="done">Terminé</SelectItem>
                 </SelectContent>
               </Select>
             </>
@@ -242,13 +240,13 @@ export function TasksPage() {
         <div className="flex items-center gap-4">
           <Button variant="outline" onClick={handleExport}>
             <Download className="h-4 w-4 mr-2" />
-            Export
+            Exporter
           </Button>
           <ViewToggle view={viewMode} onViewChange={setViewMode} />
         </div>
       </div>
 
-      {/* Content */}
+      {/* Contenu */}
       {viewMode === "table" ? (
         <TasksTable
           filters={filters}
@@ -259,21 +257,23 @@ export function TasksPage() {
         />
       ) : (
         <>
-          {/* Tasks Grid - Your existing logic */}
+          {/* Grille de tâches */}
           {tasks?.length === 0 ? (
             <div className="text-center py-12">
               <div className="max-w-sm mx-auto">
-                <h3 className="text-lg font-medium mb-2">No tasks found</h3>
+                <h3 className="text-lg font-medium mb-2">
+                  Aucune tâche trouvée
+                </h3>
                 <p className="text-muted-foreground mb-6">
                   {filters.search ||
                   filters.project_id ||
                   filters.status?.length
-                    ? "Try adjusting your filters"
-                    : "Get started by creating your first task"}
+                    ? "Essayez d'ajuster vos filtres"
+                    : "Commencez en créant votre première tâche"}
                 </p>
                 <Button onClick={handleCreateTask}>
                   <Plus className="h-4 w-4 mr-2" />
-                  Create Task
+                  Créer une tâche
                 </Button>
               </div>
             </div>
