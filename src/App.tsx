@@ -79,7 +79,7 @@ function App() {
         </AuthProvider>
 
         {/* React Query DevTools */}
-        <ReactQueryDevtools initialIsOpen={false} />
+        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
       </QueryClientProvider>
     </ErrorBoundary>
   );
