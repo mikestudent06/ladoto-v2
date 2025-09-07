@@ -1,4 +1,3 @@
-// src/components/ui/data-table.tsx - Reusable Data Table Component
 import React, { useState, useMemo } from "react";
 import {
   ChevronUp,
@@ -70,19 +69,19 @@ export function DataTable<T extends Record<string, any>>({
   onView,
   onBulkDelete,
   onExport,
-  searchPlaceholder = "Search...",
+  searchPlaceholder = "Rechercher...",
   className,
-  emptyMessage = "No data found",
+  emptyMessage = "Aucune donnée trouvée",
   pageSize = 10,
 }: DataTableProps<T>) {
-  // State
+  // État
   const [searchTerm, setSearchTerm] = useState("");
   const [sortConfig, setSortConfig] = useState<SortConfig | null>(null);
   const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
   const [currentPage, setCurrentPage] = useState(1);
   const [filters, setFilters] = useState<Record<string, string>>({});
 
-  // Get unique values for filterable columns
+  // Obtenir les valeurs uniques pour les colonnes filtrables
   const filterOptions = useMemo(() => {
     const options: Record<string, string[]> = {};
     columns.forEach((column) => {
@@ -96,11 +95,11 @@ export function DataTable<T extends Record<string, any>>({
     return options;
   }, [data, columns]);
 
-  // Filter and sort data
+  // Filtrer et trier les données
   const filteredAndSortedData = useMemo(() => {
     let filteredData = data;
 
-    // Apply search filter
+    // Appliquer le filtre de recherche
     if (searchTerm) {
       filteredData = filteredData.filter((item) =>
         Object.values(item).some((value) =>
@@ -109,7 +108,7 @@ export function DataTable<T extends Record<string, any>>({
       );
     }
 
-    // Apply column filters
+    // Appliquer les filtres de colonnes
     Object.entries(filters).forEach(([key, value]) => {
       if (value) {
         filteredData = filteredData.filter(
@@ -118,7 +117,7 @@ export function DataTable<T extends Record<string, any>>({
       }
     });
 
-    // Apply sorting
+    // Appliquer le tri
     if (sortConfig) {
       filteredData = [...filteredData].sort((a, b) => {
         const aValue = a[sortConfig.key];
@@ -144,7 +143,7 @@ export function DataTable<T extends Record<string, any>>({
     return filteredAndSortedData.slice(startIndex, startIndex + pageSize);
   }, [filteredAndSortedData, currentPage, pageSize]);
 
-  // Handlers
+  // Gestionnaires
   const handleSort = (key: string) => {
     setSortConfig((current) => {
       if (!current || current.key !== key) {
@@ -201,10 +200,10 @@ export function DataTable<T extends Record<string, any>>({
 
   return (
     <div className={cn("space-y-4", className)}>
-      {/* Toolbar */}
+      {/* Barre d'outils */}
       <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
         <div className="flex flex-1 items-center space-x-2">
-          {/* Search */}
+          {/* Recherche */}
           <div className="relative max-w-sm">
             <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
@@ -215,7 +214,7 @@ export function DataTable<T extends Record<string, any>>({
             />
           </div>
 
-          {/* Column Filters */}
+          {/* Filtres de colonnes */}
           {Object.entries(filterOptions).map(([key, options]) => {
             const column = columns.find((col) => col.key === key);
             if (!column?.filterable) return null;
@@ -232,10 +231,10 @@ export function DataTable<T extends Record<string, any>>({
                 }
               >
                 <SelectTrigger className="w-[150px]">
-                  <SelectValue placeholder={`Filter ${column.label}`} />
+                  <SelectValue placeholder={`Filtrer ${column.label}`} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All {column.label}</SelectItem>
+                  <SelectItem value="all">Tout {column.label}</SelectItem>
                   {options.map((option) => (
                     <SelectItem key={option} value={option}>
                       {option}
@@ -248,11 +247,12 @@ export function DataTable<T extends Record<string, any>>({
         </div>
 
         <div className="flex items-center space-x-2">
-          {/* Bulk Actions */}
+          {/* Actions en lot */}
           {selectedItems.size > 0 && (
             <div className="flex items-center space-x-2">
               <span className="text-sm text-muted-foreground">
-                {selectedItems.size} selected
+                {selectedItems.size} sélectionné
+                {selectedItems.size > 1 ? "s" : ""}
               </span>
               {onBulkDelete && (
                 <Button
@@ -261,40 +261,40 @@ export function DataTable<T extends Record<string, any>>({
                   onClick={handleBulkDelete}
                 >
                   <Trash2 className="h-4 w-4 mr-2" />
-                  Delete ({selectedItems.size})
+                  Supprimer ({selectedItems.size})
                 </Button>
               )}
             </div>
           )}
 
-          {/* Export */}
+          {/* Exporter */}
           {onExport && (
             <Button variant="outline" size="sm" onClick={onExport}>
               <Download className="h-4 w-4 mr-2" />
-              Export
+              Exporter
             </Button>
           )}
         </div>
       </div>
 
-      {/* Table */}
+      {/* Tableau */}
       <div className="rounded-md border">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
               <tr className="border-b bg-muted/50">
-                {/* Select All Checkbox */}
+                {/* Case à cocher Tout sélectionner */}
                 {onBulkDelete && (
                   <th className="w-12 px-4 py-3">
                     <Checkbox
                       checked={allSelected}
                       onCheckedChange={handleSelectAll}
-                      aria-label="Select all"
+                      aria-label="Tout sélectionner"
                     />
                   </th>
                 )}
 
-                {/* Column Headers */}
+                {/* En-têtes de colonnes */}
                 {columns.map((column) => (
                   <th
                     key={String(column.key)}
@@ -320,7 +320,7 @@ export function DataTable<T extends Record<string, any>>({
                   </th>
                 ))}
 
-                {/* Actions Column */}
+                {/* Colonne Actions */}
                 {(onEdit || onDelete || onView) && (
                   <th className="w-20 px-4 py-3">
                     <span className="text-sm font-medium">Actions</span>
@@ -341,7 +341,7 @@ export function DataTable<T extends Record<string, any>>({
                   >
                     <div className="flex items-center justify-center">
                       <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
-                      <span className="ml-2">Loading...</span>
+                      <span className="ml-2">Chargement...</span>
                     </div>
                   </td>
                 </tr>
@@ -361,7 +361,7 @@ export function DataTable<T extends Record<string, any>>({
               ) : (
                 paginatedData.map((item, index) => (
                   <tr key={item.id} className="border-b hover:bg-muted/50">
-                    {/* Select Checkbox */}
+                    {/* Case à cocher de sélection */}
                     {onBulkDelete && (
                       <td className="px-4 py-3">
                         <Checkbox
@@ -369,12 +369,12 @@ export function DataTable<T extends Record<string, any>>({
                           onCheckedChange={(checked) =>
                             handleSelectItem(item.id, checked as boolean)
                           }
-                          aria-label={`Select row ${index + 1}`}
+                          aria-label={`Sélectionner la ligne ${index + 1}`}
                         />
                       </td>
                     )}
 
-                    {/* Data Columns */}
+                    {/* Colonnes de données */}
                     {columns.map((column) => (
                       <td
                         key={String(column.key)}
@@ -397,20 +397,20 @@ export function DataTable<T extends Record<string, any>>({
                           <DropdownMenuTrigger asChild>
                             <Button variant="ghost" className="h-8 w-8 p-0">
                               <MoreHorizontal className="h-4 w-4" />
-                              <span className="sr-only">Open menu</span>
+                              <span className="sr-only">Ouvrir le menu</span>
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
                             {onView && (
                               <DropdownMenuItem onClick={() => onView(item)}>
                                 <Eye className="mr-2 h-4 w-4" />
-                                View
+                                Voir
                               </DropdownMenuItem>
                             )}
                             {onEdit && (
                               <DropdownMenuItem onClick={() => onEdit(item)}>
                                 <Edit className="mr-2 h-4 w-4" />
-                                Edit
+                                Modifier
                               </DropdownMenuItem>
                             )}
                             {onDelete && (
@@ -419,7 +419,7 @@ export function DataTable<T extends Record<string, any>>({
                                 className="text-destructive"
                               >
                                 <Trash2 className="mr-2 h-4 w-4" />
-                                Delete
+                                Supprimer
                               </DropdownMenuItem>
                             )}
                           </DropdownMenuContent>
@@ -437,14 +437,13 @@ export function DataTable<T extends Record<string, any>>({
         {totalPages > 1 && (
           <div className="flex items-center justify-between px-4 py-3 border-t">
             <div className="text-sm text-muted-foreground">
-              Showing{" "}
+              Affichage de{" "}
               {Math.min(
                 (currentPage - 1) * pageSize + 1,
                 filteredAndSortedData.length
               )}{" "}
-              to{" "}
-              {Math.min(currentPage * pageSize, filteredAndSortedData.length)}{" "}
-              of {filteredAndSortedData.length} results
+              à {Math.min(currentPage * pageSize, filteredAndSortedData.length)}{" "}
+              sur {filteredAndSortedData.length} résultats
             </div>
 
             <div className="flex items-center space-x-2">
@@ -454,7 +453,7 @@ export function DataTable<T extends Record<string, any>>({
                 onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
                 disabled={currentPage === 1}
               >
-                Previous
+                Précédent
               </Button>
 
               <div className="flex items-center space-x-1">
@@ -484,7 +483,7 @@ export function DataTable<T extends Record<string, any>>({
                 }
                 disabled={currentPage === totalPages}
               >
-                Next
+                Suivant
               </Button>
             </div>
           </div>
