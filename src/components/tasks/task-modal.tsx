@@ -131,7 +131,7 @@ export function TaskModal({
           // Base: mobile-first responsive design
           "w-full max-w-full h-full max-h-screen overflow-y-auto",
           // Sur mobile (default): plein écran
-          "sm:max-w-lg sm:h-auto sm:max-h-[90vh]",
+          "sm:max-w-lg sm:h-auto sm:max-h-[60vh]",
           // Sur desktop: taille adaptée au contenu
           "md:max-w-2xl lg:max-w-3xl",
           // Padding adaptatif
