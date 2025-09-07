@@ -130,7 +130,7 @@ export function TaskModal({
         className={cn(
           isViewing
             ? "max-h-full"
-            : "w-full h-full sm:max-w-[1100px] sm:max-h-[810px] overflow-y-scroll"
+            : "w-full sm:max-w-[1100px] max-h-[calc(100vh-100px)] overflow-y-scroll"
         )}
       >
         <DialogHeader>
