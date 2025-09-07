@@ -171,7 +171,7 @@ export function TasksPage() {
 
       {/* Contrôles */}
       <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
-        <div className="flex flex-1 items-center gap-4">
+        <div className="flex flex-col sm:flex-row flex-1 items-center gap-4">
           {/* Filtres - uniquement pour la vue cartes, le tableau a ses propres filtres */}
           {viewMode === "cards" && (
             <>
