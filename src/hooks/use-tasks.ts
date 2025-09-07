@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { tasksApi } from "@/api/tasks";
-import type { Task, TaskFormData, TaskFilters, TaskStats } from "@/types";
+import type { Task, TaskFormData, TaskFilters } from "@/types";
 
 // Query Keys
 export const taskKeys = {
@@ -182,7 +182,7 @@ export function useDeleteTask() {
 
       return { previousTasks, previousTask };
     },
-    onError: (error: Error, id, context) => {
+    onError: (error: Error, context) => {
       // Rollback on error
       queryClient.setQueryData(taskKeys.lists(), context?.previousTasks);
       toast.error(error.message || "Failed to delete task");

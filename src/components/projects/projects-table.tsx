@@ -1,4 +1,3 @@
-import React from "react";
 import { Badge } from "@/components/ui/badge";
 import { DataTable, type TableColumn } from "@/components/ui/data-table";
 import { useProjects, useDeleteProject } from "@/hooks/use-projects";

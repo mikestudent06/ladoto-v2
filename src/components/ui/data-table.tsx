@@ -6,13 +6,10 @@ import {
   MoreHorizontal,
   ArrowUpDown,
   Download,
-  Filter,
   Search,
   Trash2,
   Edit,
   Eye,
-  CheckSquare,
-  Square,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -31,7 +28,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
 // Types
@@ -202,7 +198,6 @@ export function DataTable<T extends Record<string, any>>({
   const allSelected =
     paginatedData.length > 0 &&
     paginatedData.every((item) => selectedItems.has(item.id));
-  const someSelected = paginatedData.some((item) => selectedItems.has(item.id));
 
   return (
     <div className={cn("space-y-4", className)}>

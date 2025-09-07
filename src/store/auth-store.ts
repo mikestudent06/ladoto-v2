@@ -176,7 +176,7 @@
 
 //Session storage version :
 import { create } from "zustand";
-import { devtools, persist } from "zustand/middleware";
+import { devtools } from "zustand/middleware";
 import { toast } from "sonner";
 import { auth } from "@/lib/supabase";
 import type { User, AuthState } from "@/types";

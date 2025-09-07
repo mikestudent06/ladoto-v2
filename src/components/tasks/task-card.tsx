@@ -1,4 +1,4 @@
-import { Calendar, Flag, MoreHorizontal } from "lucide-react";
+import { Calendar, Flag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { formatDate } from "@/lib/utils";

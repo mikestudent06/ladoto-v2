@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Plus, Search, Filter, Download } from "lucide-react";
+import { Plus, Search, Download } from "lucide-react";
 import { useDebounce } from "use-debounce";
 
 import { Button } from "@/components/ui/button";

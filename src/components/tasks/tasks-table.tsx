@@ -1,4 +1,3 @@
-import React from "react";
 import { Calendar, Flag } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { DataTable, type TableColumn } from "@/components/ui/data-table";
@@ -57,32 +56,6 @@ export function TasksTable({
       sortable: true,
       filterable: true,
       render: (value, task) => {
-        const getStatusColor = (status: Task["status"]) => {
-          switch (status) {
-            case "todo":
-              return "secondary";
-            case "in_progress":
-              return "info";
-            case "done":
-              return "success";
-            default:
-              return "default";
-          }
-        };
-
-        const getStatusText = (status: Task["status"]) => {
-          switch (status) {
-            case "todo":
-              return "To Do";
-            case "in_progress":
-              return "In Progress";
-            case "done":
-              return "Done";
-            default:
-              return status;
-          }
-        };
-
         return (
           <select
             value={value}
