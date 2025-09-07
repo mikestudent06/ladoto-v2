@@ -55,10 +55,10 @@ export function useCreateProject() {
       // Add to cache optimistically
       queryClient.setQueryData(projectKeys.detail(newProject.id), newProject);
 
-      toast.success("Project created successfully!");
+      toast.success("Projet créé avec succès !");
     },
     onError: (error: Error) => {
-      toast.error(error.message || "Failed to create project");
+      toast.error(error.message || "Échec de la création du projet");
     },
   });
 }
@@ -97,7 +97,7 @@ export function useUpdateProject() {
         projectKeys.detail(id),
         context?.previousProject
       );
-      toast.error(error.message || "Failed to update project");
+      toast.error(error.message || "Échec de la mise à jour du projet");
     },
     onSuccess: (updatedProject) => {
       // Invalidate related queries
@@ -106,7 +106,7 @@ export function useUpdateProject() {
         projectKeys.detail(updatedProject.id),
         updatedProject
       );
-      toast.success("Project updated successfully!");
+      toast.success("Projet mis à jour avec succès !");
     },
   });
 }
@@ -135,13 +135,13 @@ export function useDeleteProject() {
     },
     onError: (error: Error) => {
       // Rollback on error
-      toast.error(error.message || "Failed to delete project");
+      toast.error(error.message || "Échec de la suppression du projet");
     },
     onSuccess: (_, id) => {
       // Remove from cache
       queryClient.removeQueries({ queryKey: projectKeys.detail(id) });
       queryClient.removeQueries({ queryKey: projectKeys.stats(id) });
-      toast.success("Project deleted successfully!");
+      toast.success("Projet supprimé avec succès !");
     },
   });
 }

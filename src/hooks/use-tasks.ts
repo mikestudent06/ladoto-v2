@@ -74,10 +74,10 @@ export function useCreateTask() {
       // Add to cache
       queryClient.setQueryData(taskKeys.detail(newTask.id), newTask);
 
-      toast.success("Task created successfully!");
+      toast.success("Tâche créée avec succès !");
     },
     onError: (error: Error) => {
-      toast.error(error.message || "Failed to create task");
+      toast.error(error.message || "Échec de la création de la tâche");
     },
   });
 }
@@ -102,7 +102,7 @@ export function useUpdateTask() {
     },
     onError: (error: Error, { id }, context) => {
       queryClient.setQueryData(taskKeys.detail(id), context?.previousTask);
-      toast.error(error.message || "Failed to update task");
+      toast.error(error.message || "Échec de la mise à jour de la tâche");
     },
     onSuccess: (updatedTask) => {
       // Invalidate related queries
@@ -113,7 +113,7 @@ export function useUpdateTask() {
       queryClient.invalidateQueries({ queryKey: taskKeys.dashboardStats() });
 
       queryClient.setQueryData(taskKeys.detail(updatedTask.id), updatedTask);
-      toast.success("Task updated successfully!");
+      toast.success("Tâche mise à jour avec succès !");
     },
   });
 }
@@ -138,7 +138,9 @@ export function useUpdateTaskStatus() {
     },
     onError: (error: Error, { id }, context) => {
       queryClient.setQueryData(taskKeys.detail(id), context?.previousTask);
-      toast.error(error.message || "Failed to update task status");
+      toast.error(
+        error.message || "Échec de la mise à jour du statut de la tâche"
+      );
     },
     onSuccess: (updatedTask) => {
       // Invalidate lists and stats
@@ -184,13 +186,13 @@ export function useDeleteTask() {
     },
     onError: (error: Error) => {
       // Rollback on error
-      toast.error(error.message || "Failed to delete task");
+      toast.error(error.message || "Échec de la suppression de la tâche");
     },
     onSuccess: (_, id) => {
       // Remove from cache
       queryClient.removeQueries({ queryKey: taskKeys.detail(id) });
       queryClient.invalidateQueries({ queryKey: taskKeys.dashboardStats() });
-      toast.success("Task deleted successfully!");
+      toast.success("Tâche supprimée avec succès !");
     },
   });
 }
