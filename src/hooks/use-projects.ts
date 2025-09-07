@@ -133,9 +133,8 @@ export function useDeleteProject() {
 
       return { previousProjects };
     },
-    onError: (error: Error, context) => {
+    onError: (error: Error) => {
       // Rollback on error
-      queryClient.setQueryData(projectKeys.lists(), context?.previousProjects);
       toast.error(error.message || "Failed to delete project");
     },
     onSuccess: (_, id) => {

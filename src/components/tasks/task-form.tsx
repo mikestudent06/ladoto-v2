@@ -216,7 +216,7 @@ export function TaskForm({
     control,
     formState: { errors, isSubmitting },
   } = useForm<TaskFormData>({
-    resolver: zodResolver(taskSchema),
+    resolver: zodResolver(taskSchema as any),
     defaultValues: {
       title: task?.title || "",
       description: task?.description || "",
@@ -252,7 +252,7 @@ export function TaskForm({
   };
 
   return (
-    <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6">
+    <form onSubmit={handleSubmit(handleFormSubmit as any)} className="space-y-6">
       <div className="space-y-2">
         <Label htmlFor="title">Titre de la tâche</Label>
         <Input

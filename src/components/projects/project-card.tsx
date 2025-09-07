@@ -44,7 +44,7 @@ export function ProjectCard({
 
   const taskCount = Array.isArray(project.tasks)
     ? project.tasks.length
-    : project.tasks?.[0]?.count || 0;
+    : 0;
 
   return (
     <div className="bg-white rounded-lg border p-6 hover:shadow-md transition-shadow">

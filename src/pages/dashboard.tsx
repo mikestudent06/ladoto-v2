@@ -11,6 +11,7 @@ import {
   AlertCircle,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import type { Project } from "@/types";
 
 export function DashboardPage() {
   const {
@@ -148,7 +149,7 @@ export function DashboardPage() {
           </div>
         ) : (
           <div className="space-y-3">
-            {recentProjects.map((project) => (
+            {recentProjects.map((project: Project) => (
               <div
                 key={project.id}
                 className="flex items-center justify-between p-3 border rounded-lg"
@@ -166,8 +167,8 @@ export function DashboardPage() {
                   <p className="text-xs text-muted-foreground">
                     {Array.isArray(project.tasks)
                       ? project.tasks.length
-                      : project.tasks?.[0]?.count || 0}{" "}
-                    tasks
+                      : 0}{" "}
+                    task(s)
                   </p>
                 </div>
               </div>

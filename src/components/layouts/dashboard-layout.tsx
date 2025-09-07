@@ -3,7 +3,6 @@ import {
   Home,
   Folder,
   CheckSquare,
-  Settings,
   User,
   LogOut,
   Menu,
@@ -18,7 +17,6 @@ const navigation = [
   { name: "Dashboard", href: "/dashboard", icon: Home },
   { name: "Projects", href: "/dashboard/projects", icon: Folder },
   { name: "Tasks", href: "/dashboard/tasks", icon: CheckSquare },
-  { name: "Settings", href: "/dashboard/settings", icon: Settings },
 ];
 
 export function DashboardLayout() {

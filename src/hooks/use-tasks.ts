@@ -182,9 +182,8 @@ export function useDeleteTask() {
 
       return { previousTasks, previousTask };
     },
-    onError: (error: Error, context) => {
+    onError: (error: Error) => {
       // Rollback on error
-      queryClient.setQueryData(taskKeys.lists(), context?.previousTasks);
       toast.error(error.message || "Failed to delete task");
     },
     onSuccess: (_, id) => {

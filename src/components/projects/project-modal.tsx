@@ -82,9 +82,7 @@ export function ProjectModal({
     return status.charAt(0).toUpperCase() + status.slice(1);
   };
 
-  const taskCount = Array.isArray(project?.tasks)
-    ? project.tasks.length
-    : project?.tasks?.[0]?.count || 0;
+  const taskCount = Array.isArray(project?.tasks) ? project.tasks.length : 0;
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
